@@ -2,7 +2,7 @@
   <section class="chart-container">
     <el-row>
       <div class="show-section top">
-        <span>今日系统安全指数：</span>
+        <span>今日销量：</span>
         <el-rate
           v-model="value5"
           disabled

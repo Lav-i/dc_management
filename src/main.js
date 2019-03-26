@@ -11,14 +11,14 @@ import Table from './views/table/table';
 import Form from './views/form/form';
 import ue from './views/editor/editor';
 import 'font-awesome/css/font-awesome.min.css';
-import Mock from './mock/mock';
+// import Mock from './mock/mock';
 
 import '../static/UE/ueditor.config.js'
 import '../static/UE/ueditor.all.min.js'
 import '../static/UE/lang/zh-cn/zh-cn.js'
 import '../static/UE/ueditor.parse.min.js'
 
-Mock.mockData();
+// Mock.mockData();
 Vue.use(VueRouter);// 安装路由功能
 /* eslint-disable no-new */
 Vue.use(VueRouter);

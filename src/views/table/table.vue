@@ -3,53 +3,38 @@
     <el-row>
       <el-col :span="24">
         <!--表单-->
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-          <el-form-item label="姓名">
-            <el-input v-model="formInline.user.name" placeholder="姓名" style="width: 140px;"></el-input>
+        <el-form :inline="true" :model="searchBox" class="demo-form-inline">
+          <el-form-item label="id">
+            <el-input v-model="searchBox.id" placeholder="id" style="width: 140px "></el-input>
           </el-form-item>
-          <el-form-item label="年份">
-            <el-date-picker
-              v-model="formInline.user.date"
-              align="right"
-              type="year"
-              placeholder="选择年份">
-            </el-date-picker>
+          <el-form-item label="name">
+            <el-input v-model="searchBox.name" placeholder="name" style="width: 140px "></el-input>
           </el-form-item>
-          <el-form-item label="地址">
-            <el-cascader expand-trigger="hover" :options="options" v-model="formInline.user.address"></el-cascader>
-          </el-form-item>
-          <el-form-item label="籍贯">
-            <el-select v-model="formInline.user.place" placeholder="请选择">
-              <el-option
-                v-for="item in places"
-                :label="item.label"
-                :value="item.value">
+          <el-form-item label="category">
+            <el-select v-model="searchBox.category" placeholder="请选择">
+              <el-option v-for="(item, index) in searchBox.options" :label="item.label" :value="item.value"
+                :key="index">
               </el-option>
             </el-select>
           </el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
-          <a href="javascript:;" id="download" style="background-color:#409EFF;color: #fff;padding: 12px 10px!important;margin-left: 10px!important;border-radius:4px " @click="download()" download="download.csv">导出数据</a>
+          <a href="javascript: " id="download"
+            style="background-color:#409EFF color: #fff padding: 12px 10px!important margin-left: 10px!important border-radius:4px "
+            @click="download()" download="download.csv">导出数据</a>
         </el-form>
         <!--表格-->
-        <el-table
-          :data="tableData"
-          border
-          style="width: 100%">
+        <el-table :data="tableData" border style="width: 100%">
           <el-table-column type="selection">
           </el-table-column>
-          <el-table-column
-            prop="date"
-            label="出生日期"
-            width="180">
+          <el-table-column prop="id" label="id" sortable>
           </el-table-column>
-          <el-table-column
-            prop="name"
-            label="姓名"
-            width="180">
+          <el-table-column prop="name" label="name" sortable>
           </el-table-column>
-          <el-table-column
-            prop="address"
-            label="地址">
+          <el-table-column prop="category" label="category" sortable>
+          </el-table-column>
+          <el-table-column prop="depict" label="depict" sortable>
+          </el-table-column>
+          <el-table-column prop="price" label="price" sortable>
           </el-table-column>
           <el-table-column label="操作">
             <template scope="scope">
@@ -58,28 +43,21 @@
             </template>
           </el-table-column>
         </el-table>
-        <div class="block">
-          <el-pagination
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            :current-page="currentPage"
-            :page-size="100"
-            layout="prev, pager, next, jumper"
-            :total="1000">
-          </el-pagination>
-        </div>
       </el-col>
     </el-row>
-    <el-dialog title="修改个人信息" :visible="dialogFormVisible" size="tiny">
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-form-item label="姓名">
+    <el-dialog title="修改商品信息" :visible.sync="dialogFormVisible" size="tiny">
+      <el-form ref="form" :model="form" label-wid th="80px">
+        <el-form-item label="name">
           <el-input v-model="form.name"></el-input>
         </el-form-item>
-        <el-form-item label="地址">
-          <el-input v-model="form.address"></el-input>
+        <el-form-item label="category">
+          <el-input v-model="form.category"></el-input>
         </el-form-item>
-        <el-form-item label="出生日期">
-          <el-date-picker type="date" placeholder="选择日期" v-model="form.date" style="width: 100%;" ></el-date-picker>
+        <el-form-item label="depict">
+          <el-input v-model="form.depict"></el-input>
+        </el-form-item>
+        <el-form-item label="price">
+          <el-input v-model="form.price"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="handleSave" :loading="editLoading">修改</el-button>
@@ -90,119 +68,112 @@
   </section>
 </template>
 <script type="text/ecmascript-6">
-  const ERR_OK = "000";
+  const ERR_OK = 0
   export default {
-    data () {
+    data() {
       return {
-        formInline: {
-          user: {
-            name: '',
-            date: '',
-            address: [],
-            place: ''
-          }
+        searchBox: {
+          id: '',
+          name: '',
+          category: 'all',
+          options: [],
         },
         tableData: [],
-        options: [],
-        places: [],
         dialogFormVisible: false,
         editLoading: false,
         form: {
           name: '',
-          address: '',
-          date: '',
-        },
-        currentPage: 4,
-        table_index: 999,
-      };
+          category: '',
+          depict: '',
+          price: ''
+        }
+      }
     },
-    created () {
-      this.$http.get('/api/getTable').then((response) => {
-        response = response.data;
+    created() {
+      this.$http.get('/api/menu').then((response) => {
+        response = response.data
         if (response.code === ERR_OK) {
-          this.tableData = response.datas;
+          this.tableData = response.data
         }
-      });
-      this.$http.get('/api/getOptions').then((response) => {
-        response = response.data;
+      })
+      this.$http.get('/api/menu/getcategory').then((response) => {
+        response = response.data
         if (response.code === ERR_OK) {
-          this.options = response.datas;
-          this.places = response.places;
+          this.searchBox.options = response.data.map((currentValue, index, arr) => {
+            return {
+              "label": currentValue,
+              "value": currentValue
+            }
+          })
+          this.searchBox.options.unshift({
+            "label": "all",
+            "value": "all"
+          })
         }
-      });
+      })
     },
     methods: {
-      onSubmit () {
-        this.$message('模拟数据，这个方法并不管用哦~');
+      onSubmit() {
+        console.log(this.searchBox)
       },
-      handleDelete (index, row) {
-        this.tableData.splice(index, 1);
-        this.$message({
-          message: "操作成功！",
-          type: 'success'
-        });
+      handleDelete(index, row) {
+        this.$http.post('/api/menu/delete', {
+          id: row.id
+        }).then((response) => {
+          response = response.data
+          if (response.code === ERR_OK) {
+            this.tableData.splice(index, 1)
+            this.$message({
+              message: "操作成功！",
+              type: 'success'
+            })
+          }
+        })
       },
-      handleEdit (index, row) {
-        this.dialogFormVisible = true;
-        this.form = Object.assign({}, row);
-        this.table_index = index;
+      handleEdit(index, row) {
+        this.dialogFormVisible = true
+        this.form = Object.assign({}, row)
+        this.table_index = index
       },
-      handleSave () {
+      handleSave() {
         this.$confirm('确认提交吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           cancelButtonClass: 'cancel'
         }).then(() => {
-          this.editLoading = true;
-          let date = this.form.date;
-          if (typeof date === "object") {
-            date = [date.getFullYear(), (date.getMonth() + 1), (date.getDate())].join('-');
-            this.form.date = date
-          }
-//          this.tableData[this.table_index] = this.form;
-          this.tableData.splice(this.table_index, 1, this.form);
-          this.$message({
-            message: "操作成功！",
-            type: 'success'
-          });
-          this.editLoading = false;
-          this.dialogFormVisible = false;
-        }).catch(() => {
-
-        });
+          this.$http.post('/api/menu/update', this.form).then((response) => {
+            response = response.data
+            if (response.code === ERR_OK) {
+              this.editLoading = true
+              this.tableData.splice(this.table_index, 1, this.form)
+              this.$message({
+                message: "操作成功！",
+                type: 'success'
+              })
+              this.editLoading = false
+              this.dialogFormVisible = false
+            }
+          })
+        })
       },
-      download: function() {
-        console.log("xiazai")
-        var obj = document.getElementById('download');
-        var str = "姓名,出生日期,地址\n";
-        for (var i = 0; i < this.tableData.length; i++) {
-          var item = this.tableData[i];
-          str += item.name + ',' + item.date + ',' + item.address;
-          str += "\n";
+      download() {
+        let obj = document.getElementById('download')
+        let str = "id,name,category,depict,price\n"
+        for (let i = 0; i < this.tableData.length; i++) {
+          let item = this.tableData[i]
+          str += item.id + ',' + item.name + ',' + item.category + ',' + item.depict + ',' + item.price
+          str += "\n"
         }
-        console.log(obj)
-        str = encodeURIComponent(str);
-        console.log(str)
-        obj.href = "data:text/csv;charset=utf-8,\ufeff" + str;
-        obj.download = "download.csv";
-      },
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`);
-      },
-      handleCurrentChange(val) {
-        this.currentPage = val;
-        console.log(`当前页: ${val}`);
+        str = encodeURIComponent(str)
+        obj.href = "data:text/csv charset=utf-8,\ufeff" + str
+        obj.download = "download.csv"
       }
     }
-  };
+  }
 </script>
 <style>
   .el-pagination {
     text-align: center;
-    margin-top: 30px;
-  }
-  .el-message-box__btns .cancel {
-    float: right;
-    margin-left: 10px;
+    margin-top: 30px
   }
 </style>
