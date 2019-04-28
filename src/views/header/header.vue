@@ -5,7 +5,7 @@
       <ul class="header-operations">
         <li>
           <span class="header-lang is-active">{{user.name}}</span>
-          <span class="header-opacity">({{user.area}}/{{user.identity}})</span>
+          <span class="header-opacity">({{user.identity}})</span>
         </li>
         <li></li>
       </ul></header>

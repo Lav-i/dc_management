@@ -18,6 +18,7 @@
             </el-select>
           </el-form-item>
           <el-button type="primary" @click="onSubmit">查询</el-button>
+          <el-button type="primary" @click="newDialogFromVisble=true">添加</el-button>
           <a href="javascript: " id="download"
             style="background-color:#409EFF color: #fff padding: 12px 10px!important margin-left: 10px!important border-radius:4px "
             @click="download()" download="download.csv">导出数据</a>
@@ -32,7 +33,7 @@
           </el-table-column>
           <el-table-column prop="category" label="category" sortable>
           </el-table-column>
-          <el-table-column prop="depict" label="depict" sortable>
+          <el-table-column prop="depict" label="depict">
           </el-table-column>
           <el-table-column prop="price" label="price" sortable>
           </el-table-column>
@@ -65,6 +66,29 @@
         </el-form-item>
       </el-form>
     </el-dialog>
+    <el-dialog title="添加商品" :visible.sync="newDialogFromVisble" size="tiny">
+      <el-form ref="form" :model="item" label-wid th="80px">
+        <el-form-item label="商品id">
+          <el-input v-model="item.id"></el-input>
+        </el-form-item>
+        <el-form-item label="商品名称">
+          <el-input v-model="item.name"></el-input>
+        </el-form-item>
+        <el-form-item label="分类">
+          <el-input v-model="item.category"></el-input>
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="item.depict"></el-input>
+        </el-form-item>
+        <el-form-item label="价格">
+          <el-input v-model="item.price"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="newItem" :loading="editLoading">添加</el-button>
+          <el-button @click="newDialogFromVisble = false">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </section>
 </template>
 <script type="text/ecmascript-6">
@@ -82,6 +106,14 @@
         dialogFormVisible: false,
         editLoading: false,
         form: {
+          name: '',
+          category: '',
+          depict: '',
+          price: ''
+        },
+        newDialogFromVisble: false,
+        item: {
+          id: '',
           name: '',
           category: '',
           depict: '',
@@ -154,6 +186,21 @@
               this.dialogFormVisible = false
             }
           })
+        })
+      },
+      newItem() {
+        this.$http.post('/api/menu/new', this.item).then((response) => {
+          response = response.data
+          if (response.code === ERR_OK) {
+            this.editLoading = true
+            this.tableData.push(this.item)
+            this.$message({
+              message: "操作成功！",
+              type: 'success'
+            })
+            this.editLoading = false
+            this.newDialogFromVisble = false
+          }
         })
       },
       download() {
