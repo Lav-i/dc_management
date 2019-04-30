@@ -19,39 +19,89 @@
       getLineChartInit() {
         const myChart = echarts.init(document.getElementById('lineChart'))
         myChart.showLoading()
-        let option = {
-          xAxis: {
-            type: 'category',
-            data: ['一月', '二月', '三月', '四月', '五月', '六月']
-          },
-          yAxis: {
-            type: 'value'
-          },
-          series: [{
-            data: [820, 932, 901, 934, 1290, 1330],
-            type: 'line'
-          }]
-        }
-        myChart.setOption(option)
+        this.$http.get('/api/order/month', {
+          params: {
+            months: 5
+          }
+        }).then((response) => {
+          response = response.data
+          if (response.code === 0) {
+            let xData = []
+            let yData = []
+            for (let i in response.data) {
+              xData.push(response.data[i].monthBefore)
+              yData.push(response.data[i].price)
+            }
+            let option = {
+              xAxis: {
+                type: 'category',
+                data: xData,
+                name: '时间（月）'
+              },
+              yAxis: {
+                type: 'value',
+                name: '销售额（元）'
+              },
+              tooltip: {
+                trigger: 'axis'
+              },
+              title: {
+                text: '近半年销售业绩',
+                textAlign: 'left'
+              },
+              series: [{
+                name: "销售额（元）",
+                data: yData,
+                type: 'line'
+              }]
+            }
+            myChart.setOption(option)
+          }
+        })
         myChart.hideLoading()
       },
       getBarChartInit() {
         const myChart = echarts.init(document.getElementById('barChart'))
         myChart.showLoading()
-        let option = {
-          xAxis: {
-            type: 'category',
-            data: ['一月', '二月', '三月', '四月', '五月', '六月']
-          },
-          yAxis: {
-            type: 'value'
-          },
-          series: [{
-            data: [820, 932, 901, 934, 1290, 1330],
-            type: 'bar'
-          }]
-        }
-        myChart.setOption(option)
+        this.$http.get('/api/order/topitem', {
+          params: {
+            days: 12345
+          }
+        }).then((response) => {
+          response = response.data
+          if (response.code === 0) {
+            let xData = []
+            let yData = []
+            for (let i in response.data) {
+              xData.push(response.data[i].name)
+              yData.push(response.data[i].count)
+            }
+            let option = {
+              xAxis: {
+                type: 'category',
+                data: xData,
+                name: '商品名'
+              },
+              yAxis: {
+                type: 'value',
+                name: '销售量（份）'
+              },
+              tooltip: {
+                trigger: 'axis'
+              },
+              title: {
+                text: '销售排行',
+                textAlign: 'left'
+              },
+              series: [{
+                name: "销售额（元）",
+                data: yData,
+                type: 'bar'
+              }]
+            }
+            myChart.setOption(option)
+          }
+        })
         myChart.hideLoading()
       }
     },

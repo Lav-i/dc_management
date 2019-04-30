@@ -8,7 +8,7 @@
           disabled
           show-text
           text-color="#ff9900"
-          text-template="{value}">
+          score-template="{value}">
         </el-rate>
       </div>
       <div class="show-section">

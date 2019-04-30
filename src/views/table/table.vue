@@ -46,7 +46,7 @@
         </el-table>
       </el-col>
     </el-row>
-    <el-dialog title="修改商品信息" :visible.sync="dialogFormVisible" size="tiny">
+    <el-dialog title="修改商品信息" :visible.sync="dialogFormVisible">
       <el-form ref="form" :model="form" label-wid th="80px">
         <el-form-item label="name">
           <el-input v-model="form.name"></el-input>
@@ -66,11 +66,8 @@
         </el-form-item>
       </el-form>
     </el-dialog>
-    <el-dialog title="添加商品" :visible.sync="newDialogFromVisble" size="tiny">
+    <el-dialog title="添加商品" :visible.sync="newDialogFromVisble">
       <el-form ref="form" :model="item" label-wid th="80px">
-        <el-form-item label="商品id">
-          <el-input v-model="item.id"></el-input>
-        </el-form-item>
         <el-form-item label="商品名称">
           <el-input v-model="item.name"></el-input>
         </el-form-item>
@@ -113,7 +110,6 @@
         },
         newDialogFromVisble: false,
         item: {
-          id: '',
           name: '',
           category: '',
           depict: '',
@@ -149,17 +145,23 @@
         console.log(this.searchBox)
       },
       handleDelete(index, row) {
-        this.$http.post('/api/menu/delete', {
-          id: row.id
-        }).then((response) => {
-          response = response.data
-          if (response.code === ERR_OK) {
-            this.tableData.splice(index, 1)
-            this.$message({
-              message: "操作成功！",
-              type: 'success'
-            })
-          }
+        this.$confirm('确认提交吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancel'
+        }).then(() => {
+          this.$http.post('/api/menu/delete', {
+            id: row.id
+          }).then((response) => {
+            response = response.data
+            if (response.code === ERR_OK) {
+              this.tableData.splice(index, 1)
+              this.$message({
+                message: "操作成功！",
+                type: 'success'
+              })
+            }
+          })
         })
       },
       handleEdit(index, row) {
@@ -193,7 +195,7 @@
           response = response.data
           if (response.code === ERR_OK) {
             this.editLoading = true
-            this.tableData.push(this.item)
+            this.tableData.push(response.data)
             this.$message({
               message: "操作成功！",
               type: 'success'
