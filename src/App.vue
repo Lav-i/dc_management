@@ -40,6 +40,24 @@
     },
     components: {
       'v-header': header
+    },
+    methods: {
+      callWaiter(title, message) {
+        this.$notify({
+          title: title,
+          message: message,
+          duration: 10000
+        })
+      }
+    },
+    created() {
+      setInterval(() => {
+        this.$http.get('/api/order/findcall').then((response) => {
+          for (let i in response.data.data) {
+            this.callWaiter(response.data.data[i] + '号桌', '正在呼叫服务员')
+          }
+        })
+      }, 10000)
     }
   };
 </script>

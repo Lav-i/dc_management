@@ -1,6 +1,6 @@
 <template>
   <section>
-    <el-table :data="tableData" borderstyle="width: 100%">
+    <el-table :data="tableData" border borderstyle="width: 100%">
       <el-table-column type="selection">
       </el-table-column>
       <el-table-column label="id" prop="id" sortable>
@@ -13,8 +13,10 @@
       </el-table-column>
       <el-table-column label="price" prop="price" sortable>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="300%">
         <template scope="scope">
+          <el-button type="success" size="small" @click="handleCall(scope.$index, scope.row)">回执</el-button>
+          <el-button type="primary" size="small" @click="handleFinish(scope.$index, scope.row)">完成</el-button>
           <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -42,19 +44,68 @@
     },
     methods: {
       handleDelete(index, row) {
-        this.$http.post('/api/order/delete', {
-          id: row.id
-        }).then((response) => {
-          response = response.data
-          if (response.code === ERR_OK) {
-            this.tableData.splice(index, 1)
-            this.$message({
-              message: "操作成功！",
-              type: 'success'
-            })
-          }
+        this.$confirm('确认提交吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancel'
+        }).then(() => {
+          this.$http.post('/api/order/delete', {
+            id: row.id
+          }).then((response) => {
+            response = response.data
+            if (response.code === ERR_OK) {
+              this.tableData.splice(index, 1)
+              this.$message({
+                message: "操作成功！",
+                type: 'success'
+              })
+            }
+          })
         })
       },
+      handleCall(index, row) {
+        this.$confirm('确认提交吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancel'
+        }).then(() => {
+          this.$http.post('/api/order/state', {
+            id: row.id,
+            state: '已点餐'
+          }).then((response) => {
+            response = response.data
+            if (response.code === ERR_OK) {
+              console.log(response.data)
+              this.tableData.splice(index, 1, response.data)
+              this.$message({
+                message: "操作成功！",
+                type: 'success'
+              })
+            }
+          })
+        })
+      },
+      handleFinish(index, row) {
+        this.$confirm('确认提交吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          cancelButtonClass: 'cancel'
+        }).then(() => {
+          this.$http.post('/api/order/state', {
+            id: row.id,
+            state: '已完成'
+          }).then((response) => {
+            response = response.data
+            if (response.code === ERR_OK) {
+              this.tableData.splice(index, 1, response.data)
+              this.$message({
+                message: "操作成功！",
+                type: 'success'
+              })
+            }
+          })
+        })
+      }
     },
     data() {
       return {
