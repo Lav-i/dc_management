@@ -26,8 +26,8 @@
     data() {
       return {
         user: {
-          name: "name",
-          identity: "炒鸡管理员"
+          name: "Lavi",
+          identity: "超级管理员"
         }
       }
     },
@@ -57,7 +57,7 @@
             this.callWaiter(response.data.data[i] + '号桌', '正在呼叫服务员')
           }
         })
-      }, 10000)
+      }, 12000)
     }
   };
 </script>

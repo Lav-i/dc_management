@@ -8,7 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import App from './App';
 import Index from './views/index/index';
 import Table from './views/table/table';
-import Form from './views/form/form';
+import Todo from './views/todo/todo';
 import Order from './views/order/order'
 import 'font-awesome/css/font-awesome.min.css';
 // import Mock from './mock/mock';
@@ -48,10 +48,10 @@ let routes = [
     path: '/',
     component: App,
     children: [
-      {path: '/index', component: Index, name: '首页', class: 'fa-line-chart'},
-      {path: '/table', component: Table, name: '商品', class: 'fa-table'},
-      {path: '/order', component: Order, name: '订单', class: 'fa-newspaper-o'},
-      {path: '/form', component: Form, name: 'form', class: 'fa-newspaper-o'}
+      {path: '/index', component: Index, name: '销售业绩', class: 'fa-line-chart'},
+      {path: '/todo', component: Todo, name: '正在处理', class: 'fa-check-square-o'},
+      {path: '/table', component: Table, name: '商品管理', class: 'fa-table'},
+      {path: '/order', component: Order, name: '订单管理', class: 'fa-newspaper-o'}
     ]
   }
 ];

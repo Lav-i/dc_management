@@ -1,25 +1,25 @@
 <template>
   <div>
     <header>
-      <img src="./logo.svg" alt="logo" class="header-logo">
+      <span style="font-size: xx-large;color: white;"><i>智能点餐后台管理系统</i></span>
+      <!-- <img src="./logo.svg" alt="logo" class="header-logo"> -->
       <ul class="header-operations">
         <li>
           <span class="header-lang is-active">{{user.name}}</span>
           <span class="header-opacity">({{user.identity}})</span>
         </li>
         <li></li>
-      </ul></header>
+      </ul>
+    </header>
   </div>
 </template>
 <script>
   export default {
     props: {
-      user: {
-      }
+      user: {}
     },
-    data () {
-      return {
-      };
+    data() {
+      return {};
     },
   };
 </script>
@@ -36,16 +36,19 @@
     box-sizing: border-box;
     position: fixed;
   }
+
   .header-logo {
     display: inline-block;
     vertical-align: middle;
   }
+
   .header-operations {
     display: inline-block;
     float: right;
     padding-right: 30px;
     height: 100%;
   }
+
   .header-operations li {
     color: #fff;
     display: inline-block;
@@ -55,13 +58,17 @@
     line-height: 80px;
     cursor: pointer;
   }
-  .header-operations li:first-child{
+
+  .header-operations li:first-child {
     cursor: default
   }
-  .header-opacity{
+
+  .header-opacity {
     opacity: .7;
   }
-  .header-operations:after, header:after {
+
+  .header-operations:after,
+  header:after {
     display: inline-block;
     content: "";
     height: 100%;

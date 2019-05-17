@@ -2,10 +2,10 @@
   <div class="chart-container">
     <el-row>
       <el-col :span="12" class="chart chart_left">
-        <div id="lineChart" style="height: 650px">图表加载失败</div>
+        <div id="lineChart" style="height: 420px">图表加载失败</div>
       </el-col>
       <el-col :span="12" class="chart">
-        <div id="barChart" style="height: 650px">图表加载失败</div>
+        <div id="barChart" style="height: 420px">图表加载失败</div>
       </el-col>
     </el-row>
   </div>
@@ -35,7 +35,10 @@
             let option = {
               xAxis: {
                 type: 'category',
-                data: xData,
+                data: xData.map((val) => {
+                  let month = new Date().getMonth() + 13 - val
+                  return month > 12 ? month % 12 + "月" : month + "月"
+                }),
                 name: '时间（月）'
               },
               yAxis: {
@@ -52,7 +55,12 @@
               series: [{
                 name: "销售额（元）",
                 data: yData,
-                type: 'line'
+                type: 'line',
+                markLine: {
+                  data: [{
+                    type: 'average'
+                  }]
+                }
               }]
             }
             myChart.setOption(option)

@@ -6,7 +6,6 @@
         <el-rate
           v-model="value5"
           disabled
-          show-text
           text-color="#ff9900"
           score-template="{value}">
         </el-rate>

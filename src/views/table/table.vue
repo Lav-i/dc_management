@@ -4,13 +4,13 @@
       <el-col :span="24">
         <!--表单-->
         <el-form :inline="true" :model="searchBox" class="demo-form-inline">
-          <el-form-item label="id">
-            <el-input v-model="searchBox.id" placeholder="id" style="width: 140px "></el-input>
+          <el-form-item label="编号">
+            <el-input v-model="searchBox.id" placeholder="编号" style="width: 140px "></el-input>
           </el-form-item>
-          <el-form-item label="name">
-            <el-input v-model="searchBox.name" placeholder="name" style="width: 140px "></el-input>
+          <el-form-item label="商品名称">
+            <el-input v-model="searchBox.name" placeholder="商品名称" style="width: 140px "></el-input>
           </el-form-item>
-          <el-form-item label="category">
+          <el-form-item label="商品分类">
             <el-select v-model="searchBox.category" placeholder="请选择">
               <el-option v-for="(item, index) in searchBox.options" :label="item.label" :value="item.value"
                 :key="index">
@@ -27,17 +27,17 @@
         <el-table :data="tableData" border style="width: 100%">
           <el-table-column type="selection">
           </el-table-column>
-          <el-table-column prop="id" label="id" sortable>
+          <el-table-column prop="id" label="编号" sortable>
           </el-table-column>
-          <el-table-column prop="name" label="name" sortable>
+          <el-table-column prop="name" label="商品名称" sortable>
           </el-table-column>
-          <el-table-column prop="category" label="category" sortable>
+          <el-table-column prop="category" label="商品分类" sortable>
           </el-table-column>
-          <el-table-column prop="depict" label="depict">
+          <el-table-column prop="depict" label="商品描述">
           </el-table-column>
-          <el-table-column prop="price" label="price" sortable>
+          <el-table-column prop="price" label="价格（元）" sortable>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="可执行操作">
             <template scope="scope">
               <el-button type="primary" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
               <el-button type="danger" size="small" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
@@ -96,7 +96,7 @@
         searchBox: {
           id: '',
           name: '',
-          category: 'all',
+          category: '所有',
           options: [],
         },
         tableData: [],
